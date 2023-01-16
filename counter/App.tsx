@@ -7,11 +7,11 @@ export default function App() {
   const [number1, setNumber1] = useState<string>("");
   const [number2, setNumber2] = useState<string>("");
 
-  const handleSum = () => {
+  const handleSum = (): void => {
     setResult(Number(number1) + Number(number2));
   }
 
-  const handleSubtract = () => {
+  const handleSubtract = (): void => {
     setResult(Number(number1) - Number(number2));
   }
 
