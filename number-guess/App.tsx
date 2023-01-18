@@ -1,9 +1,11 @@
 import { StyleSheet, Text, TextInput, View, Button, Alert } from 'react-native';
 import { useMemo, useState } from 'react';
 
+const TITLE: string = "Guess a number between 1-100";
+
 export default function App() {
 
-  const [msg, setMsg] = useState<string>("Guess a number between 1-100");
+  const [msg, setMsg] = useState<string>(TITLE);
   const [guessedNumber, setGuessedNumber] = useState<string>("");
   const [totalGuesses, setTotalGuesses] = useState<number>(1);
   const [games, setGames] = useState<number>(0);
@@ -19,7 +21,7 @@ export default function App() {
       setMsg(`Your guess ${guessedNumber} is too low`);
     } else {
       Alert.alert(`You guessed the number in ${totalGuesses} guesses`);
-      setMsg("Guess a number between 1-100");
+      setMsg(TITLE);
       setGames((prev: number) => prev + 1);
       setTotalGuesses(1);
       setGuessedNumber("");
