@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, FlatList, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useState } from 'react';
 
 export default function App() {
@@ -6,13 +6,28 @@ export default function App() {
   const [result, setResult] = useState<number>(0);
   const [number1, setNumber1] = useState<string>("");
   const [number2, setNumber2] = useState<string>("");
+  const [calculations, setCalculations] = useState<string[]>(["History"]);
 
-  const handleSum = (): void => {
-    setResult(Number(number1) + Number(number2));
-  }
-
-  const handleSubtract = (): void => {
-    setResult(Number(number1) - Number(number2));
+  const calculate = (operator: string): void => {
+    if (!isNaN(parseInt(number1)) && !isNaN(parseInt(number2))) {
+      let calculation = "";
+      if (operator === "+") {
+        setResult(parseInt(number1) + parseInt(number2));
+        calculation = `${number1} + ${number2} = ${parseInt(number1) + parseInt(number2)}`;
+      } else if (operator === "-") {
+        setResult(parseInt(number1) - parseInt(number2));
+        calculation = `${number1} - ${number2} = ${parseInt(number1) - parseInt(number2)}`;
+      } else if (operator === "*") {
+        setResult(parseInt(number1) * parseInt(number2));
+        calculation = `${number1} * ${number2} = ${parseInt(number1) * parseInt(number2)}`;
+      } else {
+        setResult(parseFloat(number1) / parseFloat(number2));
+        calculation = `${number1} / ${number2} = ${parseFloat(number1) / parseFloat(number2)}`;
+      }
+      setCalculations([...calculations, calculation]);
+      setNumber1("");
+      setNumber2("");
+    }
   }
 
   return (
@@ -21,13 +36,13 @@ export default function App() {
       <View style={styles.inputView}>
       <TextInput 
         style={styles.inputElement}
-        keyboardType="number-pad"
+        keyboardType="numeric"
         value={number1}
         onChangeText={num1 => setNumber1(num1)}
       />
       <TextInput
         style={styles.inputElement}
-        keyboardType="number-pad"
+        keyboardType="numeric"
         value={number2}
         onChangeText={num2 => setNumber2(num2)}
       />
@@ -35,13 +50,25 @@ export default function App() {
       <View style={styles.buttonView}>
         <Button
           title="+"
-          onPress={handleSum}
+          onPress={() => calculate("+")}
         />
         <Button
           title="-" 
-          onPress={handleSubtract}
+          onPress={() => calculate("-")}
+        />
+        <Button
+          title="*" 
+          onPress={() => calculate("*")}
+        />
+        <Button
+          title="/" 
+          onPress={() => calculate("/")}
         />
       </View>
+      <FlatList
+        data={calculations}
+        renderItem={({item}) => <Text style={styles.text}>{item}</Text>} 
+      />
     </View>
   );
 }
@@ -49,6 +76,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 80,
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -64,6 +92,10 @@ const styles = StyleSheet.create({
   buttonView: {
     flexDirection: "row",
     justifyContent: "space-evenly",
-    width: 100
+    width: 200,
+    marginBottom: 80
+  },
+  text: {
+    fontSize: 18
   }
 });
